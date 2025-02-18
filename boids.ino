@@ -252,42 +252,6 @@ public:
         return steer;
     }
 
-//    static float velocity;
-//    float x;
-//    float y;
-//    float angle;
-//    Boid() {
-//      this->x = 0.0f;
-//      this->x = 0.0f;
-//      this->angle = 2.0f;
-//    }
-//    void randomize() {
-//        this->x = random(0, SCREEN_WIDTH - 1);
-//        this->y = random(0, SCREEN_HEIGHT - 1);
-//        this->angle = random(0, 2*PI);
-//    }
-//    void update(float deltaTime) {
-//        this->x += cos(this->angle) * velocity * deltaTime;
-//        this->y += sin(this->angle) * velocity * deltaTime;
-//        while (this->x < 0.0f) {
-//            this->x += SCREEN_WIDTH;
-//        }
-//        while (this->y < 0.0f) {
-//            this->y += SCREEN_HEIGHT;
-//        }
-//        while (this->x > SCREEN_WIDTH) {
-//            this->x -= SCREEN_WIDTH;
-//        }
-//        while (this->y > SCREEN_HEIGHT) {
-//            this->y -= SCREEN_HEIGHT;
-//        }
-//    }
-//    void render() {
-//        display.drawPixel(this->x, this->y, WHITE);
-//    }
-};
-//float Boid::velocity = 50.0;
-
 float distance(vec3_t from, vec3_t to) {
     return (from - to).mag();
 }
@@ -328,9 +292,6 @@ void setup() {
   Wire.setClock(10000); //400khz clock
   Serial.begin(9600);
   delay(1000);
-  //while (!Serial) {
-  //  ;
-  //}
 
 #if BOARD_VENDORID == 0x2e8a && BOARD_PRODUCTID == 0x00c0
     // If we're on raspberry pi pico
@@ -426,36 +387,24 @@ void loop() {
         float rawX = accelData.accelY;
         float rawY = accelData.accelX;
 #endif
+        Serial.print("update: ");
+        Serial.print(rawX);
+        Serial.print(", ");
+        Serial.print(rawY);
+        Serial.print(", ");
+        Serial.print(accelData.accelZ);
+        Serial.print("\n");
+
         int16_t x = CIRCLE_RADIUS + ((rawX*factor + 1) / 2) * (SCREEN_WIDTH - CIRCLE_RADIUS);
         int16_t y = CIRCLE_RADIUS + ((rawY*factor + 1) / 2) * (SCREEN_HEIGHT - CIRCLE_RADIUS);
         vec3_t predator_location = vec3_t(x, y);
-//  writeFloatString(accelData.accelX);
-//  writeString(", ");
-//  writeFloatString(accelData.accelY);
-//  writeString(", ");
-//  writeFloatString((float)x);
-//  writeString(", ");
-//  writeFloatString((float)y);
         display.drawCircle(x, y, CIRCLE_RADIUS, SSD1306_WHITE);
-        //writeString("\nTEMPERATURE = ");
-        //writeString("\nTEMPERATURE = ");
-        //writeFloatString(temperature);
-        //writeString(", HUMIDITY = ");
-        //writeFloatString(humidity);
-        //writeString("\n");
-//        for (int i = 0; i < NUM_BOIDS; ++i) {
-//            boids[i].update(1.0f/50.0f);
-//        }
-//        for (int i = 0; i < NUM_BOIDS; ++i) {
-//            boids[i].render();
-//        }
-        bool first = true;
+        bool first = false;
         for (Boid &boid : boids) {
             boid.run(boids, predator_location, first);
             first = false;
         }
         Serial.println();
         display.display();
-//        delay(50);
     }
 }
