@@ -1,3 +1,8 @@
+// Requires the arduino libraries
+// Bounce2 by Thomas O Fredericks (2.71)
+// Vector by Peter Polidoro (1.2.2)
+// Vector datatype by RCmags... (1.3.1)
+// Adafruit SSD1306 by Adafruit (2.5.13)
 #include <Vector.h>
 
 #include <Vector_datatype.h>
